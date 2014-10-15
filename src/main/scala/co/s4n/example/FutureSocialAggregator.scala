@@ -5,7 +5,7 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.collection.JavaConversions._
 
-class FutureSocialAggregator {
+git sclass FutureSocialAggregator {
 
   def amigos(): Seq[String] = {
     val swa = new SocialWeb20Adapter
