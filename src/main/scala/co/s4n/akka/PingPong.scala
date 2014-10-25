@@ -1,12 +1,14 @@
 package co.s4n.akka
 
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.{Executors, TimeUnit}
 
 import akka.actor._
 import akka.util.Timeout
 import scala.concurrent.{Future, ExecutionContext}
 import scala.concurrent.duration._
 import akka.pattern._
+
+import scala.util.{Failure, Success}
 
 
 object PingPong extends App {
@@ -44,16 +46,27 @@ object PingPong2 extends App {
 
 class Ping extends Actor {
   private implicit val _: ExecutionContext = context.dispatcher
+//  private val executorService = Executors.newFixedThreadPool(4)
+//  private implicit val _ = ExecutionContext.fromExecutorService(executorService)
+
   private val pong: ActorSelection = context.actorSelection("akka://PingPongActorSystem/user/Pong")
 
   override def receive: Receive = {
     case message: String =>
+      println( message )
       pong ! "PING"
     case ping: PingRequest =>
       val originalSender = sender()
       implicit val timeout = Timeout(5, TimeUnit.SECONDS)
       val response: Future[PongRequest] = (pong ? ping).mapTo[PongRequest]
-      response map ( originalSender ! _.message )
+
+      response map ( x => originalSender ! x.message )
+
+      response.onComplete {
+        case Success( x ) => originalSender ! x.message
+        case Failure( ex ) => throw ex
+      }
+
       ()
     case message =>
       println(s"Unmanaged message at Ping: $message")
@@ -65,6 +78,7 @@ class Pong extends Actor {
 
   override def receive: Receive = {
     case message: String =>
+      println( message )
       sender ! "PONG"
     case ping: PingRequest =>
       sender ! PongRequest( "PONG" )

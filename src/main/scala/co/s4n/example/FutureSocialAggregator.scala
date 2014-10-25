@@ -1,11 +1,17 @@
 package co.s4n.example
 
+import java.util.concurrent.Executors
+
 import co.s4n.sa.SocialWeb20Adapter
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
+//import scala.concurrent.ExecutionContext.Implicits.global
 import scala.collection.JavaConversions._
 
-git sclass FutureSocialAggregator {
+
+class FutureSocialAggregator {
+
+  private val executorService = Executors.newFixedThreadPool(4)
+  private implicit val _ = ExecutionContext.fromExecutorService(executorService)
 
   def amigos(): Seq[String] = {
     val swa = new SocialWeb20Adapter
@@ -83,6 +89,8 @@ git sclass FutureSocialAggregator {
 }
 
 class FunctionalSWA {
+  private val executorService = Executors.newFixedThreadPool(4)
+  private implicit val executionContext = ExecutionContext.fromExecutorService(executorService)
 
   private val swa = new SocialWeb20Adapter
 

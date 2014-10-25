@@ -41,7 +41,7 @@ class PingPongSupervisor extends Actor {
 
   override def receive: Actor.Receive = {
     case message: String =>
-      ping ! message
+      ping.forward( message )
   }
 }
 
@@ -52,7 +52,7 @@ class Ping extends Actor {
   override def receive: Receive = {
     case message: String =>
       println( s"Message $message received at Ping")
-//      throw new Exception( "Let me crash!" )
+      throw new Exception( "Let me crash!" )
     case ping: PingRequest =>
       val originalSender = sender()
       implicit val timeout = Timeout(5, TimeUnit.SECONDS)
