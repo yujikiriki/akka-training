@@ -1,3 +1,6 @@
+# vagrant
+immutable_infrastructure/.vagrant/
+
 .classpath
 .project
 .settings/
