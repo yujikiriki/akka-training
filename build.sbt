@@ -1,7 +1,7 @@
 import spray.revolver.RevolverPlugin._
 import AssemblyKeys._
 
-name := "sbt-example"
+name := "akka-training"
 
 version := "0.0.1"
 
@@ -46,4 +46,3 @@ scalacOptions ++= Seq(
   "-Xfuture"     
 )
 
-javaHome := Some(file("/home/yuji/dev/jdk1.7.0_60"))
