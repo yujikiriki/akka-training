@@ -15,8 +15,8 @@ object SupervisedPingPong extends App {
   val system = ActorSystem("PingPongActorSystem")
   implicit val _: ExecutionContext = system.dispatcher
 
-  val pingPongSupervisor: ActorRef = system.actorOf(Props[PingPongSupervisor], "PingPongSupervisor")
-//  val pingPongSupervisor: ActorRef = system.actorOf(RoundRobinPool(5).props(Props[PingPongSupervisor]), "PingPongSupervisor")
+//  val pingPongSupervisor: ActorRef = system.actorOf(Props[PingPongSupervisor], "PingPongSupervisor")
+  val pingPongSupervisor: ActorRef = system.actorOf(RoundRobinPool(2).props(Props[PingPongSupervisor]), "PingPongSupervisor")
 
   pingPongSupervisor ! "Hola mundo!"
   pingPongSupervisor ! "Hola mundo!"
